@@ -9,7 +9,7 @@ const Register = () => {
     if (localStorage.getItem("chat-app-user")) {
       navigate("/")
     }
-  })
+  }, [navigate])
   return (
     <>
       <form className="flex justify-center items-center h-screen bg-[#131324]" onSubmit={handleRegisterSubmit}>

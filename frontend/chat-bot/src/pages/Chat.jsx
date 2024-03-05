@@ -6,7 +6,7 @@ import Contacts from '../components/Contacts'
 import axios from 'axios'
 
 const Chat = () => {
-  const { currentUser, setCurrentUser, navigate, contacts, setContacts } = useData()
+  const { currentUser, setCurrentUser, navigate, contacts, setContacts, handleChatChange } = useData()
 
   useEffect(() => {
     const checkUser = async () => {
@@ -17,13 +17,13 @@ const Chat = () => {
       }
     }
     checkUser()
-  })
+  }, [navigate, setCurrentUser])
 
   useEffect(() => {
     const checkCurrentUser = async () => {
       if (currentUser) {
         if (currentUser.isAvatarImageSet) {
-          const { data } = await axios.get(`${allUsers}/${currentUser._id}`)
+          const data = await axios.get(`${allUsers}/${currentUser._id}`)
           setContacts(data.data)
         } else {
           navigate('/setAvatar')
@@ -35,7 +35,7 @@ const Chat = () => {
   return (
     <Container>
       <div className="container">
-        <Contacts contacts={contacts} />
+        <Contacts contacts={contacts} currentUser={currentUser} changeChat={handleChatChange} />
       </div>
     </Container>
   )

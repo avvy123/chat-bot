@@ -27,6 +27,9 @@ const DataProvider = ({ children }) => {
   const [selectedAvatar, setSelectedAvatar] = useState(undefined)
   const [contacts, setContacts] = useState([])
   const [currentUser, setCurrentUser] = useState(undefined)
+  const [currentUsername, setCurrentUsername] = useState(undefined)
+  const [currentUserImage, setCurrentUserImage] = useState(undefined)
+  const [currentChatSelected, setCurrentChatSelected] = useState(undefined)
 
   const toastOptions = {
     position: "bottom-right",
@@ -139,8 +142,8 @@ const DataProvider = ({ children }) => {
         image: avatars[selectedAvatar]
       })
       if (data.isSet) {
-        user.isAvatarImageSet = true
-        user.avatarImag = data.image
+        user.isAvatarImageSet = true;
+        user.avatarImage = data.image;
         localStorage.setItem("chat-app-user", JSON.stringify(user))
         navigate("/")
       } else {
@@ -149,8 +152,12 @@ const DataProvider = ({ children }) => {
     }
   }
 
+  const handleChatChange = (chat) => {
+    setCurrentChatSelected(chat)
+  }
+
   return (
-    <DataContext.Provider value={{ handleRegisterChange, handleLoginChange, registerUser, handleRegisterSubmit, loginUser, handleLoginSubmit, avatars, navigate, selectedAvatar, setSelectedAvatar, setProfilePicture, isLoading, currentUser, setCurrentUser, contacts, setContacts }}>
+    <DataContext.Provider value={{ handleRegisterChange, handleLoginChange, registerUser, handleRegisterSubmit, loginUser, handleLoginSubmit, avatars, navigate, selectedAvatar, setSelectedAvatar, setProfilePicture, isLoading, currentUser, setCurrentUser, contacts, setContacts, setCurrentUserImage, setCurrentUsername, currentUserImage, currentUsername, currentChatSelected, setCurrentChatSelected, handleChatChange }}>
       {children}
     </DataContext.Provider>
   )
