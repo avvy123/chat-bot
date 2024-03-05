@@ -2,8 +2,9 @@ import PropTypes from 'prop-types'
 import { createContext, useEffect, useState } from 'react'
 import axios from 'axios'
 import { toast } from 'react-toastify'
-import { login, register } from '../utils/API Routes'
+import { login, register, setAvatar } from '../utils/API Routes'
 import { useNavigate } from 'react-router-dom'
+import { Buffer } from "buffer"
 
 export const DataContext = createContext()
 
@@ -21,6 +22,10 @@ const DataProvider = ({ children }) => {
     password: ""
   })
 
+  const [avatars, setAvatars] = useState([])
+  const [isLoading, setIsLoading] = useState(true)
+  const [selectedAvatar, setSelectedAvatar] = useState(undefined)
+
   const toastOptions = {
     position: "bottom-right",
     autoClose: "5000",
@@ -29,11 +34,21 @@ const DataProvider = ({ children }) => {
     theme: "dark"
   }
 
+  const api = "https://api.multiavatar.com/4589621"
+
   useEffect(() => {
-    if (localStorage.getItem("chat-app-user")) {
-      navigate("/")
+    const fetchData = async () => {
+      const data = []
+      for (let i = 0; i < 4; i++) {
+        const image = await axios.get(`${api}/${Math.round(Math.random() * 1000)}`)
+        const buffer = new Buffer(image.data)
+        data.push(buffer.toString("base64"))
+      }
+      setAvatars(data)
+      setIsLoading(false)
     }
-  })
+    fetchData()
+  }, [])
 
   const handleRegisterSubmit = async (event) => {
     event.preventDefault()
@@ -113,8 +128,27 @@ const DataProvider = ({ children }) => {
     setLoginUser({ ...loginUser, [event.target.name]: event.target.value })
   }
 
+  const setProfilePicture = async () => {
+    if (selectedAvatar === undefined) {
+      toast.error("Please select an avatar", toastOptions)
+    } else {
+      const user = await JSON.parse(localStorage.getItem("chat-app-user"))
+      const { data } = await axios.post(`${setAvatar}/${user._id}`, {
+        image: avatars[selectedAvatar]
+      })
+      if (data.isSet) {
+        user.isAvatarImageSet = true
+        user.avatarImag = data.image
+        localStorage.setItem("chat-app-user", JSON.stringify(user))
+        navigate("/")
+      } else {
+        toast.error("Error in setting avatar, please try again later", toastOptions)
+      }
+    }
+  }
+
   return (
-    <DataContext.Provider value={{ handleRegisterChange, handleLoginChange, registerUser, handleRegisterSubmit, loginUser, handleLoginSubmit }}>
+    <DataContext.Provider value={{ handleRegisterChange, handleLoginChange, registerUser, handleRegisterSubmit, loginUser, handleLoginSubmit, avatars, navigate, selectedAvatar, setSelectedAvatar, setProfilePicture, isLoading }}>
       {children}
     </DataContext.Provider>
   )

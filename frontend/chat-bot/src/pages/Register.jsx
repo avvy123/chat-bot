@@ -1,8 +1,15 @@
+import { useEffect } from 'react'
 import People_together from '../assets/People_together.svg.png'
 import { useData } from "../store/utils"
 
 const Register = () => {
-  const { registerUser, handleRegisterChange, handleRegisterSubmit } = useData()
+  const { registerUser, handleRegisterChange, handleRegisterSubmit, navigate } = useData()
+
+  useEffect(() => {
+    if (localStorage.getItem("chat-app-user")) {
+      navigate("/")
+    }
+  })
   return (
     <>
       <form className="flex justify-center items-center h-screen bg-[#131324]" onSubmit={handleRegisterSubmit}>

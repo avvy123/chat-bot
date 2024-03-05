@@ -6,7 +6,7 @@ require("dotenv").config({ path: '../frontend/chat-bot/.env' })
 
 const app = express()
 
-//  Middlewares
+// Middlewares
 app.use(cors())
 app.use(express.json())
 app.use("/api/auth", userRoutes)
