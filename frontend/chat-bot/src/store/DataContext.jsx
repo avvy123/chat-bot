@@ -25,6 +25,8 @@ const DataProvider = ({ children }) => {
   const [avatars, setAvatars] = useState([])
   const [isLoading, setIsLoading] = useState(true)
   const [selectedAvatar, setSelectedAvatar] = useState(undefined)
+  const [contacts, setContacts] = useState([])
+  const [currentUser, setCurrentUser] = useState(undefined)
 
   const toastOptions = {
     position: "bottom-right",
@@ -148,7 +150,7 @@ const DataProvider = ({ children }) => {
   }
 
   return (
-    <DataContext.Provider value={{ handleRegisterChange, handleLoginChange, registerUser, handleRegisterSubmit, loginUser, handleLoginSubmit, avatars, navigate, selectedAvatar, setSelectedAvatar, setProfilePicture, isLoading }}>
+    <DataContext.Provider value={{ handleRegisterChange, handleLoginChange, registerUser, handleRegisterSubmit, loginUser, handleLoginSubmit, avatars, navigate, selectedAvatar, setSelectedAvatar, setProfilePicture, isLoading, currentUser, setCurrentUser, contacts, setContacts }}>
       {children}
     </DataContext.Provider>
   )

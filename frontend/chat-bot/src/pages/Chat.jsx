@@ -1,10 +1,41 @@
 import styled from 'styled-components'
+import { useData } from '../store/utils'
+import { useEffect } from 'react'
+import { allUsers } from '../utils/API Routes'
+import Contacts from '../components/Contacts'
+import axios from 'axios'
 
 const Chat = () => {
+  const { currentUser, setCurrentUser, navigate, contacts, setContacts } = useData()
+
+  useEffect(() => {
+    const checkUser = async () => {
+      if (!localStorage.getItem("chat-app-user")) {
+        navigate("/login")
+      } else {
+        setCurrentUser(await JSON.parse(localStorage.getItem("chat-app-user")))
+      }
+    }
+    checkUser()
+  })
+
+  useEffect(() => {
+    const checkCurrentUser = async () => {
+      if (currentUser) {
+        if (currentUser.isAvatarImageSet) {
+          const { data } = await axios.get(`${allUsers}/${currentUser._id}`)
+          setContacts(data.data)
+        } else {
+          navigate('/setAvatar')
+        }
+      }
+    }
+    checkCurrentUser()
+  }, [currentUser, navigate, setContacts])
   return (
     <Container>
       <div className="container">
-
+        <Contacts contacts={contacts} />
       </div>
     </Container>
   )
