@@ -1,10 +1,8 @@
-import { Link } from "react-router-dom"
-import Login from "./Login"
 import People_together from '../assets/People_together.svg.png'
 import { useData } from "../store/utils"
 
 const Register = () => {
-  const { registerUser, handleChange, handleRegisterSubmit } = useData()
+  const { registerUser, handleRegisterChange, handleRegisterSubmit } = useData()
   return (
     <>
       <form className="flex justify-center items-center h-screen bg-[#131324]" onSubmit={handleRegisterSubmit}>
@@ -20,7 +18,7 @@ const Register = () => {
             className="bg-transparent text-white mb-5 rounded-md p-1 w-full border-[1px] border-[#4e0eff]"
             autoComplete="off"
             value={registerUser.username}
-            onChange={handleChange}
+            onChange={handleRegisterChange}
           />
           <input
             type="email"
@@ -29,7 +27,7 @@ const Register = () => {
             className="bg-transparent text-white mb-5 rounded-md p-1 w-full border-[1px] border-[#4e0eff]"
             autoComplete="off"
             value={registerUser.email}
-            onChange={handleChange}
+            onChange={handleRegisterChange}
           />
           <input
             type="password"
@@ -37,7 +35,7 @@ const Register = () => {
             name="password"
             className="bg-transparent text-white mb-5 rounded-md p-1 w-full border-[1px] border-[#4e0eff]"
             value={registerUser.password}
-            onChange={handleChange}
+            onChange={handleRegisterChange}
           />
           <input
             type="password"
@@ -45,7 +43,7 @@ const Register = () => {
             name="confirmPassword"
             className="bg-transparent text-white mb-5 rounded-md p-1 w-full border-[1px] border-[#4e0eff]"
             value={registerUser.confirmPassword}
-            onChange={handleChange}
+            onChange={handleRegisterChange}
           />
           <button
             type="submit"
@@ -53,7 +51,7 @@ const Register = () => {
           >
             Create User
           </button>
-          <span className="text-white text-center">Already have an account? <Link to='/login' className="hover:underline"><Login /></Link></span>
+          <span className="text-white text-center">Already have an account?</span>
         </div>
       </form>
     </>

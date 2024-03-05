@@ -1,8 +1,8 @@
 import PropTypes from 'prop-types'
-import { createContext, useState } from 'react'
+import { createContext, useEffect, useState } from 'react'
 import axios from 'axios'
 import { toast } from 'react-toastify'
-import { register } from '../utils/API Routes'
+import { login, register } from '../utils/API Routes'
 import { useNavigate } from 'react-router-dom'
 
 export const DataContext = createContext()
@@ -16,6 +16,11 @@ const DataProvider = ({ children }) => {
     confirmPassword: ""
   })
 
+  const [loginUser, setLoginUser] = useState({
+    username: "",
+    password: ""
+  })
+
   const toastOptions = {
     position: "bottom-right",
     autoClose: "5000",
@@ -24,12 +29,35 @@ const DataProvider = ({ children }) => {
     theme: "dark"
   }
 
+  useEffect(() => {
+    if (localStorage.getItem("chat-app-user")) {
+      navigate("/")
+    }
+  })
+
   const handleRegisterSubmit = async (event) => {
     event.preventDefault()
     if (handleRegisterValidation()) {
       const { username, email, password } = registerUser
       const { data } = await axios.post(register, {
         username, email, password
+      })
+      if (data.status === false) {
+        toast.error(data.message, toastOptions)
+      }
+      if (data.status === true) {
+        localStorage.setItem("chat-app-user", JSON.stringify(data.user))
+        navigate("/")
+      }
+    }
+  }
+
+  const handleLoginSubmit = async (event) => {
+    event.preventDefault()
+    if (handleLoginValidation()) {
+      const { username, password } = loginUser
+      const { data } = await axios.post(login, {
+        username, password
       })
       if (data.status === false) {
         toast.error(data.message, toastOptions)
@@ -63,13 +91,30 @@ const DataProvider = ({ children }) => {
     return true
   }
 
+  const handleLoginValidation = () => {
+    const { username, password } = loginUser
+    if (password === "") {
+      toast.error("Incorrect username or password", toastOptions)
+      return false
+    }
+    else if (username.length === "") {
+      toast.error("Email and password is required", toastOptions)
+      return false
+    }
+    return true
+  }
 
-  const handleChange = (event) => {
+
+  const handleRegisterChange = (event) => {
     setRegisterUser({ ...registerUser, [event.target.name]: event.target.value })
   }
 
+  const handleLoginChange = (event) => {
+    setLoginUser({ ...loginUser, [event.target.name]: event.target.value })
+  }
+
   return (
-    <DataContext.Provider value={{ handleChange, registerUser, handleRegisterSubmit }}>
+    <DataContext.Provider value={{ handleRegisterChange, handleLoginChange, registerUser, handleRegisterSubmit, loginUser, handleLoginSubmit }}>
       {children}
     </DataContext.Provider>
   )

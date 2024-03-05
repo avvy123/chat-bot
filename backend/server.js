@@ -2,9 +2,9 @@ const express = require("express")
 const cors = require("cors")
 const mongoose = require("mongoose")
 const userRoutes = require("./routes/userRoutes")
+require("dotenv").config({ path: '../frontend/chat-bot/.env' })
 
 const app = express()
-require("dotenv").config()
 
 //  Middlewares
 app.use(cors())
