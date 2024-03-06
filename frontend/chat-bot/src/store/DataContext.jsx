@@ -2,7 +2,7 @@ import PropTypes from 'prop-types'
 import { createContext, useEffect, useState } from 'react'
 import axios from 'axios'
 import { toast } from 'react-toastify'
-import { login, register, setAvatar } from '../utils/API Routes'
+import { login, register, sendMessage, setAvatar } from '../utils/API Routes'
 import { useNavigate } from 'react-router-dom'
 import { Buffer } from "buffer"
 
@@ -33,6 +33,7 @@ const DataProvider = ({ children }) => {
   const [isLoaded, setIsLoaded] = useState(false)
   const [showEmojiPicker, setShowEmojiPicker] = useState(false)
   const [displayMessage, setDisplayMessage] = useState("")
+  const [userMessage, setUserMessage] = useState([])
 
   const toastOptions = {
     position: "bottom-right",
@@ -173,8 +174,12 @@ const DataProvider = ({ children }) => {
     setDisplayMessage(message)
   }
 
-  const handleSendMessage = async (msg) => {
-    alert(msg)
+  const handleSendMessage = async (message) => {
+    await axios.post(sendMessage, {
+      from: currentUser._id,
+      to: currentChatSelected._id,
+      message: message
+    })
   }
 
   const handleSendChat = (event) => {
@@ -186,7 +191,7 @@ const DataProvider = ({ children }) => {
   }
 
   return (
-    <DataContext.Provider value={{ handleRegisterChange, handleLoginChange, registerUser, handleRegisterSubmit, loginUser, handleLoginSubmit, avatars, navigate, selectedAvatar, setSelectedAvatar, setProfilePicture, isLoading, currentUser, setCurrentUser, contacts, setContacts, setCurrentUserImage, setCurrentUsername, currentUserImage, currentUsername, currentChatSelected, setCurrentChatSelected, handleChatChange, isLoaded, setIsLoaded, handleLogout, handleEmojiPicker, showEmojiPicker, handleEmojiSelect, displayMessage, setDisplayMessage, handleSendChat }}>
+    <DataContext.Provider value={{ handleRegisterChange, handleLoginChange, registerUser, handleRegisterSubmit, loginUser, handleLoginSubmit, avatars, navigate, selectedAvatar, setSelectedAvatar, setProfilePicture, isLoading, currentUser, setCurrentUser, contacts, setContacts, setCurrentUserImage, setCurrentUsername, currentUserImage, currentUsername, currentChatSelected, setCurrentChatSelected, handleChatChange, isLoaded, setIsLoaded, handleLogout, handleEmojiPicker, showEmojiPicker, handleEmojiSelect, displayMessage, setDisplayMessage, handleSendChat, userMessage, setUserMessage }}>
       {children}
     </DataContext.Provider>
   )

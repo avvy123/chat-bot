@@ -1,10 +1,31 @@
+import styled from "styled-components"
 import { useData } from "../store/utils"
 import ChatInput from "./ChatInput"
 import Logout from "./Logout"
-import Messages from "./Messages"
+import axios from "axios"
+import { useEffect } from "react"
+import { getAllMessage } from "../utils/API Routes"
+import PropTypes from 'prop-types'
 
-const ChatContainer = () => {
-  const { currentChatSelected } = useData()
+const ChatContainer = ({ currentUser, currentChatSelected }) => {
+
+  const { userMessage, setUserMessage } = useData()
+
+  useEffect(() => {
+    const fetchMessage = async () => {
+      try {
+        const response = await axios.post(getAllMessage, {
+          from: currentUser._id,
+          to: currentChatSelected._id
+        })
+        setUserMessage(response.data)
+        console.log(response.data)
+      } catch (error) {
+        console.error("Error in fetching messages", error)
+      }
+    }
+    fetchMessage()
+  }, [currentUser, currentChatSelected, setUserMessage])
   return (
     <>
       {
@@ -25,7 +46,23 @@ const ChatContainer = () => {
               </div>
               <Logout />
             </div>
-            <Messages />
+            <Container>
+              <div className="chat-messages">
+                {
+                  userMessage.map((message, index) => {
+                    return (
+                      <div key={index}>
+                        <div className={`message ${message.fromSelf ? "sender" : "received"}`}>
+                          <div className="content">
+                            <p>{message.userMessage}</p>
+                          </div>
+                        </div>
+                      </div>
+                    )
+                  })
+                }
+              </div>
+            </Container>
             <ChatInput />
           </div>
         )
@@ -33,5 +70,14 @@ const ChatContainer = () => {
     </>
   )
 }
+
+ChatContainer.propTypes = {
+  currentUser: PropTypes.object,
+  currentChatSelected: PropTypes.object
+}
+
+const Container = styled.div`
+
+`
 
 export default ChatContainer

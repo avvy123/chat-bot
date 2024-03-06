@@ -2,6 +2,7 @@ const express = require("express")
 const cors = require("cors")
 const mongoose = require("mongoose")
 const userRoutes = require("./routes/userRoutes")
+const messageRoutes = require("./routes/messageRoutes")
 require("dotenv").config({ path: '../frontend/chat-bot/.env' })
 
 const app = express()
@@ -9,7 +10,10 @@ const app = express()
 // Middlewares
 app.use(cors())
 app.use(express.json())
+
+// routes
 app.use("/api/auth", userRoutes)
+app.use("/api/message", messageRoutes)
 
 // MongoDB connection 
 mongoose.connect(process.env.MONGO_URL, {
