@@ -4,9 +4,11 @@ import { useEffect } from 'react'
 import { allUsers } from '../utils/API Routes'
 import Contacts from '../components/Contacts'
 import axios from 'axios'
+import Welcome from '../components/Welcome'
+import ChatContainer from '../components/ChatContainer'
 
 const Chat = () => {
-  const { currentUser, setCurrentUser, navigate, contacts, setContacts, handleChatChange } = useData()
+  const { currentUser, setCurrentUser, navigate, contacts, setContacts, handleChatChange, isLoaded, setIsLoaded, currentChatSelected } = useData()
 
   useEffect(() => {
     const checkUser = async () => {
@@ -14,10 +16,11 @@ const Chat = () => {
         navigate("/login")
       } else {
         setCurrentUser(await JSON.parse(localStorage.getItem("chat-app-user")))
+        setIsLoaded(true)
       }
     }
     checkUser()
-  }, [navigate, setCurrentUser])
+  }, [navigate, setCurrentUser, setIsLoaded])
 
   useEffect(() => {
     const checkCurrentUser = async () => {
@@ -36,6 +39,13 @@ const Chat = () => {
     <Container>
       <div className="container">
         <Contacts contacts={contacts} currentUser={currentUser} changeChat={handleChatChange} />
+        {
+          isLoaded && currentChatSelected === undefined ? (
+            <Welcome />
+          ) : (
+            <ChatContainer />
+          )
+        }
       </div>
     </Container>
   )

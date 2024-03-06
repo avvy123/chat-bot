@@ -65,7 +65,7 @@ const Contacts = ({ contacts, changeChat }) => {
                 })
               }
             </div>
-            <div className='flex items-center bg-[#0d0d30] p-1 rounded-md min-h-14 gap-5'>
+            <div className='flex items-center bg-[#0d0d30] p-1 min-h-14 gap-5'>
               <div>
                 <img
                   src={`data:image/svg+xml;base64, ${currentUserImage}`}

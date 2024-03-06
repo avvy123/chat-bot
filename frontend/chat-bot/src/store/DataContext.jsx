@@ -30,6 +30,7 @@ const DataProvider = ({ children }) => {
   const [currentUsername, setCurrentUsername] = useState(undefined)
   const [currentUserImage, setCurrentUserImage] = useState(undefined)
   const [currentChatSelected, setCurrentChatSelected] = useState(undefined)
+  const [isLoaded, setIsLoaded] = useState(false)
 
   const toastOptions = {
     position: "bottom-right",
@@ -157,7 +158,7 @@ const DataProvider = ({ children }) => {
   }
 
   return (
-    <DataContext.Provider value={{ handleRegisterChange, handleLoginChange, registerUser, handleRegisterSubmit, loginUser, handleLoginSubmit, avatars, navigate, selectedAvatar, setSelectedAvatar, setProfilePicture, isLoading, currentUser, setCurrentUser, contacts, setContacts, setCurrentUserImage, setCurrentUsername, currentUserImage, currentUsername, currentChatSelected, setCurrentChatSelected, handleChatChange }}>
+    <DataContext.Provider value={{ handleRegisterChange, handleLoginChange, registerUser, handleRegisterSubmit, loginUser, handleLoginSubmit, avatars, navigate, selectedAvatar, setSelectedAvatar, setProfilePicture, isLoading, currentUser, setCurrentUser, contacts, setContacts, setCurrentUserImage, setCurrentUsername, currentUserImage, currentUsername, currentChatSelected, setCurrentChatSelected, handleChatChange, isLoaded, setIsLoaded }}>
       {children}
     </DataContext.Provider>
   )
