@@ -31,6 +31,8 @@ const DataProvider = ({ children }) => {
   const [currentUserImage, setCurrentUserImage] = useState(undefined)
   const [currentChatSelected, setCurrentChatSelected] = useState(undefined)
   const [isLoaded, setIsLoaded] = useState(false)
+  const [showEmojiPicker, setShowEmojiPicker] = useState(false)
+  const [displayMessage, setDisplayMessage] = useState("")
 
   const toastOptions = {
     position: "bottom-right",
@@ -157,8 +159,34 @@ const DataProvider = ({ children }) => {
     setCurrentChatSelected(chat)
   }
 
+  const handleLogout = () => {
+    localStorage.clear()
+    navigate("/login")
+  }
+
+  const handleEmojiPicker = () => {
+    setShowEmojiPicker(!showEmojiPicker)
+  }
+
+  const handleEmojiSelect = (event) => {
+    let message = displayMessage + event.emoji
+    setDisplayMessage(message)
+  }
+
+  const handleSendMessage = async (msg) => {
+    alert(msg)
+  }
+
+  const handleSendChat = (event) => {
+    event.preventDefault()
+    if (displayMessage.length > 0) {
+      handleSendMessage(displayMessage)
+      setDisplayMessage("")
+    }
+  }
+
   return (
-    <DataContext.Provider value={{ handleRegisterChange, handleLoginChange, registerUser, handleRegisterSubmit, loginUser, handleLoginSubmit, avatars, navigate, selectedAvatar, setSelectedAvatar, setProfilePicture, isLoading, currentUser, setCurrentUser, contacts, setContacts, setCurrentUserImage, setCurrentUsername, currentUserImage, currentUsername, currentChatSelected, setCurrentChatSelected, handleChatChange, isLoaded, setIsLoaded }}>
+    <DataContext.Provider value={{ handleRegisterChange, handleLoginChange, registerUser, handleRegisterSubmit, loginUser, handleLoginSubmit, avatars, navigate, selectedAvatar, setSelectedAvatar, setProfilePicture, isLoading, currentUser, setCurrentUser, contacts, setContacts, setCurrentUserImage, setCurrentUsername, currentUserImage, currentUsername, currentChatSelected, setCurrentChatSelected, handleChatChange, isLoaded, setIsLoaded, handleLogout, handleEmojiPicker, showEmojiPicker, handleEmojiSelect, displayMessage, setDisplayMessage, handleSendChat }}>
       {children}
     </DataContext.Provider>
   )
